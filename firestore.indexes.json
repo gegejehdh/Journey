@@ -1,0 +1,1 @@
+{"indexes":[{"collectionGroup":"posts","queryScope":"COLLECTION","fields":[{"fieldPath":"status","order":"ASCENDING"},{"fieldPath":"publishAt","order":"DESCENDING"}]}]}

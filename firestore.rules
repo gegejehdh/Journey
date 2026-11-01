@@ -1,0 +1,21 @@
+rules_version='2';
+service cloud.firestore{match /databases/{db}/documents{
+ function role(){return request.auth!=null && exists(/databases/$(db)/documents/users/$(request.auth.uid)) ? get(/databases/$(db)/documents/users/$(request.auth.uid)).data.role : '';}
+ function mgr(){return role() in ['superadmin','admin'];}
+ function staff(){return role() in ['superadmin','admin','editor','reporter'];}
+ match /posts/{id}{
+  allow read: if (resource.data.status=='published' && resource.data.publishAt<=request.time) || mgr() || role()=='editor' || (role()=='reporter' && resource.data.uid==request.auth.uid);
+  allow create: if mgr() || role()=='editor' || (role()=='reporter' && request.resource.data.status=='draft' && request.resource.data.uid==request.auth.uid);
+  allow update: if mgr() || role()=='editor' || (role()=='reporter' && resource.data.uid==request.auth.uid && request.resource.data.status=='draft')
+    || (resource.data.status=='published' && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views']) && request.resource.data.views==resource.data.views+1);
+  allow delete: if mgr() || (role()=='reporter' && resource.data.uid==request.auth.uid && resource.data.status=='draft');
+ }
+ match /gallery/{id}{allow read:if true; allow write:if mgr()||role()=='editor';}
+ match /categories/{id}{allow read:if true; allow write:if mgr();}
+ match /settings/{id}{allow read:if true; allow write:if mgr();}
+ match /users/{id}{allow read:if request.auth!=null&&(request.auth.uid==id||mgr()); allow write:if role()=='superadmin';}
+ match /activity/{id}{allow read:if mgr(); allow create:if staff();}
+ match /stats/visits{allow read:if mgr();
+  allow create:if request.resource.data.count==1;
+  allow update:if request.resource.data.count==resource.data.count+1;}
+}}

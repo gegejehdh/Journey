@@ -1,0 +1,5 @@
+{"firestore":{"rules":"firestore.rules","indexes":"firestore.indexes.json"},"storage":{"rules":"storage.rules"},
+"hosting":[
+ {"site":"journey-37f16","public":"public","ignore":["firebase.json","**/.*"]},
+ {"site":"journey-37f16-7246f","public":"admin","ignore":["firebase.json","**/.*"]}
+]}
