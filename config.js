@@ -1,0 +1,1 @@
+const firebaseConfig={apiKey:"AIzaSyDje8Cm5-SK06Ax5avEFHVOh146RWhfsnY",authDomain:"journey-37f16.firebaseapp.com",projectId:"journey-37f16",storageBucket:"journey-37f16.firebasestorage.app",messagingSenderId:"5306935215",appId:"1:5306935215:web:9e0e4634025774d1c0715a",measurementId:"G-ZERDM6H2EF"};
